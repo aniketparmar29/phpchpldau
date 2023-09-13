@@ -77,6 +77,22 @@ if(isset($_POST) && !empty($_POST)){
       echo json_encode($response); 
   }
 
+}elseif($tag=="StatusSubCategory"){
+  $m->set_data('status',$status);
+  $a = array('status'=>$m->get_data('status'));
+  
+    $q = $d->update("subcategory",$a,'');
+    if($q==true){
+      $response['message']="status become $status";
+      $response['status']="200";
+      echo json_encode($response);
+    }else{
+      $response['message']="faild";
+      $response['status']="201";
+      echo json_encode($response);
+    }
+
+
 }
   
   else{

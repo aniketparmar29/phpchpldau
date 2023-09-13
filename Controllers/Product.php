@@ -81,6 +81,22 @@ elseif ($tag=="AddProduct"){
         echo json_encode($response); 
     }
 
+  }elseif($tag=="StatusProduct"){
+    $m->set_data('status',$status);
+    $a = array('status'=>$m->get_data('status'));
+    
+      $q = $d->update("product",$a,'');
+      if($q==true){
+        $response['message']="status become $status";
+        $response['status']="200";
+        echo json_encode($response);
+      }else{
+        $response['message']="faild";
+        $response['status']="201";
+        echo json_encode($response);
+      }
+
+
   }
   else{
                        $response["message"]=" not in get url faild.";
