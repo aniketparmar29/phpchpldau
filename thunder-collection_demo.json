@@ -1,0 +1,345 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "demo",
+    "dateExported": "2023-09-13T18:08:24.491Z",
+    "version": "1.1",
+    "folders": [
+        {
+            "_id": "0b8ed968-a415-47b8-808e-8644f840a1bc",
+            "name": "Product",
+            "containerId": "",
+            "created": "2023-09-13T06:34:25.372Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "7d3fee68-b702-42c6-b3cf-8f980ec04142",
+            "name": "Category",
+            "containerId": "",
+            "created": "2023-09-13T06:44:01.654Z",
+            "sortNum": 20000
+        },
+        {
+            "_id": "acdd5060-5df9-49b1-96d6-15068ecf6886",
+            "name": "SubCategory",
+            "containerId": "",
+            "created": "2023-09-13T06:44:13.823Z",
+            "sortNum": 30000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "35477122-be80-4a75-b70a-5dac3b3cbaf2",
+            "colId": "4f32c727-3889-4f79-b88c-7a60a58e6f79",
+            "containerId": "acdd5060-5df9-49b1-96d6-15068ecf6886",
+            "name": "get request",
+            "url": "http://localhost/phpdemo/Controllers/SubCategory.php",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-09-13T06:33:05.507Z",
+            "modified": "2023-09-13T07:04:56.479Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "tag",
+                        "value": "getSubCategory"
+                    },
+                    {
+                        "name": "category_id",
+                        "value": "2"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "d9354105-9df2-4dd0-a232-c8669c3f9c5d",
+            "colId": "4f32c727-3889-4f79-b88c-7a60a58e6f79",
+            "containerId": "7d3fee68-b702-42c6-b3cf-8f980ec04142",
+            "name": "get request Copy",
+            "url": "http://localhost/phpdemo/Controllers/Category.php",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-09-13T06:44:21.313Z",
+            "modified": "2023-09-13T07:01:00.871Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "tag",
+                        "value": "getCategory"
+                    },
+                    {
+                        "name": "category_id",
+                        "value": "2"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "5cbf1bdc-391a-491e-8f63-2bbab9dd9970",
+            "colId": "4f32c727-3889-4f79-b88c-7a60a58e6f79",
+            "containerId": "0b8ed968-a415-47b8-808e-8644f840a1bc",
+            "name": "get request Copy",
+            "url": "http://localhost/phpdemo/Controllers/Product.php",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-09-13T06:44:27.844Z",
+            "modified": "2023-09-13T07:03:48.462Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "tag",
+                        "value": "getProduct"
+                    },
+                    {
+                        "name": "category_id",
+                        "value": "2",
+                        "isDisabled": true
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "52cd8668-2c8b-4ce1-b73c-37edbe1e286a",
+            "colId": "4f32c727-3889-4f79-b88c-7a60a58e6f79",
+            "containerId": "7d3fee68-b702-42c6-b3cf-8f980ec04142",
+            "name": "create category",
+            "url": "http://localhost/phpdemo/Controllers/Category.php",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-09-13T06:54:22.441Z",
+            "modified": "2023-09-13T07:32:44.746Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "tag",
+                        "value": "AddCategory"
+                    },
+                    {
+                        "name": "category_status",
+                        "value": "false"
+                    },
+                    {
+                        "name": "category_name",
+                        "value": "jnjknjkbj"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "e6594c44-bbe9-4c22-b0c4-8a1b2f2884dc",
+            "colId": "4f32c727-3889-4f79-b88c-7a60a58e6f79",
+            "containerId": "acdd5060-5df9-49b1-96d6-15068ecf6886",
+            "name": "addsubcategory",
+            "url": "http://localhost/phpdemo/Controllers/SubCategory.php",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-09-13T07:41:54.221Z",
+            "modified": "2023-09-13T07:42:58.312Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "tag",
+                        "value": "AddSubCategory"
+                    },
+                    {
+                        "name": "subcategory_name",
+                        "value": "toyota"
+                    },
+                    {
+                        "name": "subcategory_categoryid",
+                        "value": "2"
+                    },
+                    {
+                        "name": "subcategory_status",
+                        "value": "true"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "37c0e063-b8b8-433f-bc68-36a2bb7ed034",
+            "colId": "4f32c727-3889-4f79-b88c-7a60a58e6f79",
+            "containerId": "0b8ed968-a415-47b8-808e-8644f840a1bc",
+            "name": "add product",
+            "url": "http://localhost/phpdemo/Controllers/Product.php",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-09-13T07:47:19.001Z",
+            "modified": "2023-09-13T08:09:48.339Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "tag",
+                        "value": "AddProduct"
+                    },
+                    {
+                        "name": "product_categoryid",
+                        "value": "2"
+                    },
+                    {
+                        "name": "product_subid",
+                        "value": "2"
+                    },
+                    {
+                        "name": "product_price",
+                        "value": "2323"
+                    },
+                    {
+                        "name": "product_name",
+                        "value": "bolera"
+                    },
+                    {
+                        "name": "product_status",
+                        "value": "true"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "5745f9db-62dc-4d33-9dff-889115d35dac",
+            "colId": "4f32c727-3889-4f79-b88c-7a60a58e6f79",
+            "containerId": "7d3fee68-b702-42c6-b3cf-8f980ec04142",
+            "name": "update category",
+            "url": "http://localhost/phpdemo/Controllers/Category.php",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-09-13T08:15:08.874Z",
+            "modified": "2023-09-13T08:16:01.331Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "tag",
+                        "value": "UpdateCategory"
+                    },
+                    {
+                        "name": "category_name",
+                        "value": "op"
+                    },
+                    {
+                        "name": "category_status",
+                        "value": "false"
+                    },
+                    {
+                        "name": "category_id",
+                        "value": "1"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "ca5e3f30-0f52-435d-8fd9-fe481c7d2235",
+            "colId": "4f32c727-3889-4f79-b88c-7a60a58e6f79",
+            "containerId": "acdd5060-5df9-49b1-96d6-15068ecf6886",
+            "name": "updatesubcategory",
+            "url": "http://localhost/phpdemo/Controllers/SubCategory.php",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-09-13T08:37:23.245Z",
+            "modified": "2023-09-13T08:38:49.945Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "tag",
+                        "value": "UpdateSubCategory"
+                    },
+                    {
+                        "name": "subcategory_name",
+                        "value": "tsadasd"
+                    },
+                    {
+                        "name": "sub_id",
+                        "value": "2"
+                    },
+                    {
+                        "name": "subcategory_status",
+                        "value": "true"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "3e734cad-8e5b-4f7b-8d62-d6693d869044",
+            "colId": "4f32c727-3889-4f79-b88c-7a60a58e6f79",
+            "containerId": "0b8ed968-a415-47b8-808e-8644f840a1bc",
+            "name": "update product",
+            "url": "http://localhost/phpdemo/Controllers/Product.php",
+            "method": "POST",
+            "sortNum": 40000,
+            "created": "2023-09-13T08:44:26.595Z",
+            "modified": "2023-09-13T08:46:41.353Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formdata",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "tag",
+                        "value": "UpdateProduct"
+                    },
+                    {
+                        "name": "pro_id",
+                        "value": "1"
+                    },
+                    {
+                        "name": "product_subid",
+                        "value": "2",
+                        "isDisabled": true
+                    },
+                    {
+                        "name": "product_price",
+                        "value": "2323"
+                    },
+                    {
+                        "name": "product_name",
+                        "value": "sadasd"
+                    },
+                    {
+                        "name": "product_status",
+                        "value": "true"
+                    }
+                ]
+            },
+            "tests": []
+        }
+    ]
+}
