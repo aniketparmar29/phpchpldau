@@ -48,19 +48,31 @@ elseif ($tag=="AddProduct"){
     $m->set_data('status',$product_status);
     $a = array('name'=>$m->get_data('name'),'status'=>$m->get_data('status'),'category_id'=>$m->get_data('category_id'),'sub_id'=>$m->get_data('sub_id'),'price'=>$m->get_data('price'));
   
-    $q= $d->insert("product",$a);
-    $sub_id = $con->insert_id;
-  
-    if($q==true){
-        $response['sub_id']=$sub_id;
-        $response['message']='Insert successfully';
-        $response['status']=200;
+    $existingCategory = $d->select("product", "name='" . $m->get_data('name') . "'");
+    
+    if ($existingCategory && $existingCategory->num_rows > 0) {
+        $response["message"] = "Product with the same name already exists.";
+        $response["status"] = "201";
         echo json_encode($response);
-    }else{
-        $response["message"]="faild.";
-        $response["status"]="201";
-        echo json_encode($response); 
+    } else {
+
+      $q= $d->insert("product",$a);
+      $sub_id = $con->insert_id;
+    
+      if($q==true){
+          $response['sub_id']=$sub_id;
+          $response['message']='Insert successfully';
+          $response['status']=200;
+          echo json_encode($response);
+      }else{
+          $response["message"]="faild.";
+          $response["status"]="201";
+          echo json_encode($response); 
+      }
     }
+
+
+
   
   }elseif ($tag=="UpdateProduct"){
 

@@ -44,19 +44,29 @@ if(isset($_POST) && !empty($_POST)){
   $m->set_data('status',$subcategory_status);
   $a = array('name'=>$m->get_data('name'),'status'=>$m->get_data('status'),'category_id'=>$m->get_data('category_id'));
 
-  $q= $d->insert("subcategory",$a);
-  $sub_id = $con->insert_id;
-
-  if($q==true){
-      $response['sub_id']=$sub_id;
-      $response['message']='Insert successfully';
-      $response['status']=200;
+  $existingCategory = $d->select("subcategory", "name='" . $m->get_data('name') . "'");
+    
+  if ($existingCategory && $existingCategory->num_rows > 0) {
+      $response["message"] = "SubCategory with the same name already exists.";
+      $response["status"] = "201";
       echo json_encode($response);
-  }else{
-      $response["message"]="faild.";
-      $response["status"]="201";
-      echo json_encode($response); 
+  } else {
+    
+      $q= $d->insert("subcategory",$a);
+      $sub_id = $con->insert_id;
+    
+      if($q==true){
+          $response['sub_id']=$sub_id;
+          $response['message']='Insert successfully';
+          $response['status']=200;
+          echo json_encode($response);
+      }else{
+          $response["message"]="faild.";
+          $response["status"]="201";
+          echo json_encode($response); 
+      }
   }
+
 
 }elseif ($tag=="UpdateSubCategory"){
 
