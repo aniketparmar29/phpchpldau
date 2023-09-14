@@ -99,6 +99,18 @@ if(isset($_POST) && !empty($_POST)){
       }
 
 
+  }elseif($tag=="DeleteCateogory"){
+    $q=$d->delete("category","category_id=$category_id");
+    if($q==true){
+      $response['message']="deleted successfully";
+      $response['status']="200";
+      echo json_encode($response);
+    }else{
+      $response['message']="faild";
+      $response['status']="201";
+      echo json_encode($response);
+    }
+
   }
 
   else{

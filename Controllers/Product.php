@@ -97,6 +97,18 @@ elseif ($tag=="AddProduct"){
       }
 
 
+  }elseif($tag=="DeleteProduct"){
+    $q=$d->delete("product","pro_id=$product_id");
+    if($q==true){
+      $response['message']="deleted successfully";
+      $response['status']="200";
+      echo json_encode($response);
+    }else{
+      $response['message']="faild";
+      $response['status']="201";
+      echo json_encode($response);
+    }
+
   }
   else{
                        $response["message"]=" not in get url faild.";
