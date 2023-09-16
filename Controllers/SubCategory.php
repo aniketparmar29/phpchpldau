@@ -118,7 +118,7 @@ elseif($tag=="DeleteSubCategory"){
 
 }
   else{
-                       $response["message"]=" not in get url faild.";
+                       $response["message"]="wrong tag";
                         $response["status"]="201";
                         echo json_encode($response); 
   }
@@ -128,4 +128,10 @@ elseif($tag=="DeleteSubCategory"){
 
 
 }
+else{
+  $response["message"]=" not in get url faild.";
+   $response["status"]="201";
+   echo json_encode($response); 
+}
+
 ?>
