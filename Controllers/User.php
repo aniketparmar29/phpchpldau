@@ -29,47 +29,69 @@ if (isset($_POST) && !empty($_POST)) {
                 $response["status"] = "400";
                 echo json_encode($response);
             } else {
-                $failedAttempts = isset($_SESSION['failed_login_attempts']) ? $_SESSION['failed_login_attempts'] : 0;
-                $lastAttemptTime = isset($_SESSION['last_login_attempt_time']) ? $_SESSION['last_login_attempt_time'] : 0;
-                $currentTimestamp = time();
-                $hourInSeconds = 3600;
-
-                if ($failedAttempts >= 3 && ($currentTimestamp - $lastAttemptTime) < $hourInSeconds) {
-                    $response["message"] = "Too many login attempts. Please try again in one hour.";
-                    $response["status"] = "429";
-                    echo json_encode($response);
-                } else {
-                    $q = $d->select("users", "email='$email' AND password='$password'", "");
-
-                    if (mysqli_num_rows($q) > 0) {
-                        $_SESSION['failed_login_attempts'] = 0;
-                        $_SESSION['last_login_attempt_time'] = 0;
-
-                        $response["usersList"] = array();
-
-                        while ($data_app = mysqli_fetch_array($q)) {
-                            $userDetails = array();
-                            $userDetails["first_name"] = $data_app["first_name"];
-                            $userDetails["last_name"] = $data_app["last_name"];
-                            $userDetails["email"] = $data_app["email"];
-                            $userDetails["created_at"] = $data_app["created_at"];
-                            array_push($response["usersList"], $userDetails);
-                        }
-
-                        $response["message"] = "Login success.";
-                        $response["status"] = "200";
+                // Set the time zone in PHP
+                date_default_timezone_set("Asia/Kolkata");
+                
+                // Set the time zone in MySQL
+                mysqli_query($con, "SET time_zone = 'Asia/Kolkata'");
+                
+                // Get the current login attempts and last attempt time from the users table
+                $getUserQuery = "SELECT id, login_attempts, last_attempt_time FROM users WHERE email='$email'";
+                $getUserResult = mysqli_query($con, $getUserQuery);
+                
+                if ($getUserResult && mysqli_num_rows($getUserResult) > 0) {
+                    $userData = mysqli_fetch_assoc($getUserResult);
+                    $userId = $userData['id'];
+                    $loginAttempts = $userData['login_attempts'];
+                    $lastAttemptTime = strtotime($userData['last_attempt_time']);
+                    
+                    $currentTimestamp = time();
+                    $hourInSeconds = 3600; // 1 hour
+                    
+                    // Check if the user has reached 3 or more failed attempts within the last hour
+                    if ($loginAttempts >= 3 && ($currentTimestamp - $lastAttemptTime) < $hourInSeconds) {
+                        $response["message"] = "Too many login attempts. Please try again in one hour.";
+                        $response["status"] = "429"; // HTTP 429 indicates too many requests
                         echo json_encode($response);
                     } else {
-                        $_SESSION['failed_login_attempts'] = $failedAttempts + 1;
-                        $_SESSION['last_login_attempt_time'] = $currentTimestamp;
-
-                        $response["message"] = "Wrong Credentials.";
-                        $response["status"] = "201";
-                        echo json_encode($response);
+                        $q = $d->select("users", "email='$email' AND password='$password'", "");
+            
+                        if (mysqli_num_rows($q) > 0) {
+                            // Reset login attempts on successful login
+                            mysqli_query($con, "UPDATE users SET login_attempts=0, last_attempt_time=NULL WHERE id=$userId");
+                            
+                            $response["usersList"] = array();
+            
+                            while ($data_app = mysqli_fetch_array($q)) {
+                                $userDetails = array();
+                                $userDetails["first_name"] = $data_app["first_name"];
+                                $userDetails["last_name"] = $data_app["last_name"];
+                                $userDetails["email"] = $data_app["email"];
+                                $userDetails["created_at"] = $data_app["created_at"];
+                                array_push($response["usersList"], $userDetails);
+                            }
+            
+                            $response["message"] = "Login success.";
+                            $response["status"] = "200";
+                            echo json_encode($response);
+                        } else {
+                            // Update login attempts and last attempt time on failed login
+                            mysqli_query($con, "UPDATE users SET login_attempts=login_attempts+1, last_attempt_time=NOW() WHERE id=$userId");
+            
+                            $response["message"] = "Wrong Credentials.";
+                            $response["status"] = "201";
+                            echo json_encode($response);
+                        }
                     }
+                } else {
+                    // User not found
+                    $response["message"] = "User not found.";
+                    $response["status"] = "404";
+                    echo json_encode($response);
                 }
             }
-        } elseif ($tag == "Register") {
+        }
+        elseif ($tag == "Register") {
             if (empty($first_name) || empty($last_name) || empty($email) || empty($password)) {
                 $response["message"] = "All fields are required for registration.";
                 $response["status"] = "400";
