@@ -15,7 +15,7 @@ if(isset($_POST) && !empty($_POST)){
 
   if($tag=='getCategory'){
 
-    $q=$d->select("category","status='true'","ORDER BY category_id DESC");
+    $q=$d->select("category","","");
 
     if (mysqli_num_rows($q) > 0) {
    
@@ -25,6 +25,7 @@ if(isset($_POST) && !empty($_POST)){
                              $categoryList=array();
                              $categoryList["category_id"]=$data_app["category_id"];
                              $categoryList["name"]=$data_app["name"];
+                             $categoryList["status"]=$data_app["status"];
                              array_push($response["categoryList"], $categoryList); 
                           }
    
