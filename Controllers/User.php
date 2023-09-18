@@ -44,8 +44,8 @@ if (isset($_POST) && !empty($_POST)) {
                     $userId = $userData['id'];
                     $loginAttempts = $userData['login_attempts'];
                     $lastAttemptTime = strtotime($userData['last_attempt_time']);
-                    
                     $currentTimestamp = time();
+                    // echo $currentTimestamp-$lastAttemptTime;
                     $hourInSeconds = 3600; // 1 hour
                     
                     // Check if the user has reached 3 or more failed attempts within the last hour
@@ -57,7 +57,6 @@ if (isset($_POST) && !empty($_POST)) {
                         $q = $d->select("users", "email='$email' AND password='$password'", "");
             
                         if (mysqli_num_rows($q) > 0) {
-                            // Reset login attempts on successful login
                             mysqli_query($con, "UPDATE users SET login_attempts=0, last_attempt_time=NULL WHERE id=$userId");
                             
                             $response["usersList"] = array();
@@ -75,7 +74,6 @@ if (isset($_POST) && !empty($_POST)) {
                             $response["status"] = "200";
                             echo json_encode($response);
                         } else {
-                            // Update login attempts and last attempt time on failed login
                             mysqli_query($con, "UPDATE users SET login_attempts=login_attempts+1, last_attempt_time=NOW() WHERE id=$userId");
             
                             $response["message"] = "Wrong Credentials.";
