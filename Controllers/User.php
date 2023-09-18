@@ -44,8 +44,8 @@ if (isset($_POST) && !empty($_POST)) {
                     $userId = $userData['id'];
                     $loginAttempts = $userData['login_attempts'];
                     $lastAttemptTime = strtotime($userData['last_attempt_time']);
-                    
                     $currentTimestamp = time();
+                    // echo $currentTimestamp-$lastAttemptTime;
                     $hourInSeconds = 3600; // 1 hour
                     
                     // Check if the user has reached 3 or more failed attempts within the last hour

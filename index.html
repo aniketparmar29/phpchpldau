@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
+<script>
+
+    const op =async ()=>{
+        try{
+            const res = await fetch("http://localhost/phpdemo/Controllers/Category.php",);
+            const data = await res.json();
+        }catch(e){
+            console.log(e)
+        }
+    }
+
+</script>
