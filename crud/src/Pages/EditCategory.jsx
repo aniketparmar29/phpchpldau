@@ -37,7 +37,7 @@ const EditCategory = () => {
   useEffect(() => {
     axios
       .post(
-        `http://localhost/phpchpldau/Controllers/Category.php?tag=getSingleCategory}`,
+        `https://prepapi.dgk-organic-urjavan-foods.co.in/Controllers/Category.php?tag=getSingleCategory}`,
         { tag: "getSingleCategory", category_id: id },
         {
           headers: {
@@ -62,7 +62,7 @@ const EditCategory = () => {
 
     axios
       .post(
-        "http://localhost/phpchpldau/Controllers/Category.php",
+        "https://prepapi.dgk-organic-urjavan-foods.co.in/Controllers/Category.php",
         {
           tag: "UpdateCategory",
           category_id: id,

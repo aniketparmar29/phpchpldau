@@ -15,7 +15,7 @@ const DisplayCategory = ({op, notifys,notifye,setOp}) => {
           category_id: id,
         };
         const response = await axios.post(
-          "http://localhost/phpchpldau/Controllers/Category.php",
+          "https://prepapi.dgk-organic-urjavan-foods.co.in/Controllers/Category.php",
           formData,
           {
             headers: {
@@ -41,7 +41,7 @@ const DisplayCategory = ({op, notifys,notifye,setOp}) => {
       };
 
       axios
-        .post("http://localhost/phpchpldau/Controllers/Category.php", formData, {
+        .post("https://prepapi.dgk-organic-urjavan-foods.co.in/Controllers/Category.php", formData, {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },

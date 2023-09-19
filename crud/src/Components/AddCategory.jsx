@@ -20,7 +20,7 @@ const AddCategory = ({setOp,op,notifye,notifys,toggleadct}) => {
         category_status: CatStatus,
       };
       const response = await axios.post(
-        "http://localhost/phpchpldau/Controllers/Category.php",
+        "https://prepapi.dgk-organic-urjavan-foods.co.in/Controllers/Category.php",
         formData,
         {
           headers: {
