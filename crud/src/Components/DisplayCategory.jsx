@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import {AiFillDelete} from 'react-icons/ai'
 import {TbEdit} from 'react-icons/tb'
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import {CgEditBlackPoint} from 'react-icons/cg'
 const DisplayCategory = ({op, notifys,notifye,setOp}) => {
     const [Data, setData] = useState([]);
@@ -10,7 +11,7 @@ const DisplayCategory = ({op, notifys,notifye,setOp}) => {
     const handleDelteCategory = async (id) => {
       try {
         const formData = {
-          tag: "DeleteCateogory",
+          tag: "DeleteCategory",
           category_id: id,
         };
         const response = await axios.post(
@@ -22,7 +23,7 @@ const DisplayCategory = ({op, notifys,notifye,setOp}) => {
             },
           }
         );
-  
+
         if (response.data.status == 200) {
             setOp(prevOp => !prevOp);
           notifys(response.data.message);
@@ -33,12 +34,12 @@ const DisplayCategory = ({op, notifys,notifye,setOp}) => {
         notifye("An error occurred:", error);
       }
     };
-  
+
     useEffect(() => {
       const formData = {
         tag: "getCategory",
       };
-  
+
       axios
         .post("http://localhost/phpchpldau/Controllers/Category.php", formData, {
           headers: {
@@ -50,9 +51,9 @@ const DisplayCategory = ({op, notifys,notifye,setOp}) => {
         })
         .catch((err) => console.error(err));
     }, [op]);
-  
 
-  
+
+
 
 
   return (
@@ -96,17 +97,19 @@ const DisplayCategory = ({op, notifys,notifye,setOp}) => {
               )}
             </td>
             <td className="px-8 py-4">
-              <a
-                 
+              <p
+
                 className="font-medium text-blue-600 hover:underline"
               >
+                <Link to={`edit/${el.category_id}`}>
                 <TbEdit  />
-              </a>
+                </Link>
+              </p>
             </td>
             <td className="px-9 py-4">
-              <a href="#" onClick={() => handleDelteCategory(el.category_id)} className="font-medium text-blue-600 hover:underline">
+              <p onClick={() => handleDelteCategory(el.category_id)} className="font-medium text-blue-600 hover:underline">
                 <AiFillDelete />
-              </a>
+              </p>
             </td>
           </tr>
         ))}
