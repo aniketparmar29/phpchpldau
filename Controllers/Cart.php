@@ -1,6 +1,6 @@
 <?php 
 error_reporting(E_ALL);
-error_reporting(E_ERROR | E_PARSE );  
+error_reporting(E_ERROR | E_PARSE);  
 error_reporting(0);  
 
 include_once '../lib.php';
@@ -90,6 +90,61 @@ if (isset($_POST) && !empty($_POST)) {
                 $response["status"] = 201;
                 echo json_encode($response);
             }
+        } else if ($tag == "getCartUser") {
+            if (isset($user_id)) {
+                $totalPrice = 0;
+                $cartItemsData = array();
+            
+                $existingCart = $d->select("cart", "user_id=$user_id", "");
+            
+                if ($existingCart && mysqli_num_rows($existingCart) > 0) {
+                    $cartData = mysqli_fetch_array($existingCart);
+                    $cart_id = $cartData['cart_id'];
+            
+                    $cartItems = $d->select("cart_item", "cart_id=$cart_id", "");
+            
+                    if ($cartItems && mysqli_num_rows($cartItems) > 0) {
+                        while ($cartItemData = mysqli_fetch_array($cartItems)) {
+                            $product_id = $cartItemData['pro_id'];
+                            $quantity = $cartItemData['product_qnty'];
+                            $productData = $d->select("product", "pro_id=$product_id", "");
+            
+                            if ($productData && mysqli_num_rows($productData) > 0) {
+                                $productInfo = mysqli_fetch_array($productData);
+                                $productPrice = $productInfo['price'];
+                                $productTotal = $productPrice * $quantity;
+                                $totalPrice += $productTotal;
+                                $cartItemDetails = array(
+                                    "product_id" => $product_id,
+                                    "product_name" => $productInfo['name'],
+                                    "quantity" => $quantity,
+                                    "product_price" => $productPrice,
+                                    "total_price" => $productTotal,
+                                );
+                                array_push($cartItemsData, $cartItemDetails);
+                            }
+                        }
+            
+                        $response["message"] = "Cart total calculated successfully";
+                        $response["status"] = 200;
+                        $response["total"] = $totalPrice;
+                        $response["cartItems"] = $cartItemsData;
+                        echo json_encode($response);
+                    } else {
+                        $response["message"] = "No cart items found for this user";
+                        $response["status"] = 201;
+                        echo json_encode($response);
+                    }
+                } else {
+                    $response["message"] = "No cart found for this user";
+                    $response["status"] = 201;
+                    echo json_encode($response);
+                }
+            } else {
+                $response["message"] = "user_id is required";
+                $response["status"] = 201;
+                echo json_encode($response);
+            }
         } else {
             $response["message"] = "Invalid tag.";
             $response["status"] = "400";
@@ -101,5 +156,6 @@ if (isset($_POST) && !empty($_POST)) {
     $response["status"] = "400";
     echo json_encode($response);
 }
+
 
 ?>
