@@ -95,7 +95,8 @@ if (isset($_POST) && !empty($_POST)) {
                 $totalPrice = 0;
                 $cartItemsData = array();
             
-                $existingCart = $d->select("cart,cart_item,product", "cart.cart_id=cart_item.cart_id AND product.pro_id=cart_item.pro_id AND cart.user_id=$user_id", "");
+                $existingCart = $d->select("cart,cart_item,product", "cart.cart_id=cart_item.cart_id AND product.pro_id=cart_item.pro_id", "");
+            
                 if ($existingCart && mysqli_num_rows($existingCart) > 0) {
                     $cartData = mysqli_fetch_array($existingCart);
                     $cart_id = $cartData['cart_id'];
@@ -126,7 +127,7 @@ if (isset($_POST) && !empty($_POST)) {
             
                         $response["message"] = "Cart total calculated successfully";
                         $response["status"] = 200;
-                        $response["total"] = "".$totalPrice;
+                        $response["total"] = $totalPrice;
                         $response["cartItems"] = $cartItemsData;
                         echo json_encode($response);
                     } else {
