@@ -18,26 +18,26 @@ if (isset($_POST) && !empty($_POST)) {
     } else {
         $tag = trim($tag);
 
-        if ($tag == "addtocart") {
-            if (isset($user_id) && isset($product_id) && isset($qnty)) {
-                $existingCart = $d->select("cart,cart_item,product", "user_id=$user_id", "");
+        if ($tag == "createOrder") {
+            if (isset($cart_id) && isset($trx_id)) {
+                $existingCart = $d->select("order_master", "cart_id=$cart_id", "");
 
                 if ($existingCart && mysqli_num_rows($existingCart) > 0) {
-                    $cartData = mysqli_fetch_array($existingCart);
+                    $orderMasterData = mysqli_fetch_array($existingCart);
                     $cart_id = $cartData['cart_id'];
                 } else {
-                    $cartData = array(
-                        'user_id' => $user_id,
+                    $orderMasterData = array(
+                        'cart_id' => $cart_id,
                         'create_at' => date('Y-m-d H:i:s')
                     );
-                    $q = $d->insert("cart", $cartData);
+                    $q = $d->insert("cart", $orderMasterData);
                     $cart_id = $con->insert_id;
                 }
 
-                $productData = $d->select("product", "pro_id=$product_id", "");
+                $cartData = $d->select("cart_item", "cart_id=$cart_id", "");
 
-                if ($productData && mysqli_num_rows($productData) > 0) {
-                    $productInfo = mysqli_fetch_array($productData);
+                if ($cartData && mysqli_num_rows($cartData) > 0) {
+                    $productInfo = mysqli_fetch_array($cartData);
                     $category_id = $productInfo['category_id'];
                     $sub_id = $productInfo['sub_id'];
                 } else {
