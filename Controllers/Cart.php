@@ -18,7 +18,7 @@ if (isset($_POST) && !empty($_POST)) {
     } else {
         $tag = trim($tag);
 
-        if ($tag == "manageCart") {
+        if ($tag == "addtocart") {
             if (isset($user_id) && isset($product_id) && isset($qnty)) {
                 $existingCart = $d->select("cart", "user_id=$user_id", "");
 
