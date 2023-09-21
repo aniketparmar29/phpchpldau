@@ -54,26 +54,44 @@ if (isset($_POST) && !empty($_POST)) {
                         $response["status"] = "429"; // HTTP 429 indicates too many requests
                         echo json_encode($response);
                     } else {
-                        $q = $d->select("users", "email='$email' AND password='$password'", "");
-            
+                        $q = $d->select(
+                            "users u 
+                            LEFT JOIN addresses a ON u.id = a.user_id", 
+                            "u.email='$email' AND u.password='$password'", 
+                            ""
+                        );
+                
                         if (mysqli_num_rows($q) > 0) {
                             mysqli_query($con, "UPDATE users SET login_attempts=0, last_attempt_time=NULL WHERE id=$userId");
-                            
-                            $response["usersList"] = array();
-            
+                
+                            $response["userDetails"] = array();
+                
                             while ($data_app = mysqli_fetch_array($q)) {
                                 $userDetails = array();
                                 $userDetails["first_name"] = $data_app["first_name"];
                                 $userDetails["last_name"] = $data_app["last_name"];
                                 $userDetails["email"] = $data_app["email"];
                                 $userDetails["created_at"] = $data_app["created_at"];
-                                array_push($response["usersList"], $userDetails);
+                
+                                // Add addresses to the user details
+                                $userDetails["addresses"] = array();
+                                if (!empty($data_app["address_id"])) {
+                                    $address = array(
+                                        "add_type" => $data_app["add_type"],
+                                        "address" => $data_app["address"],
+                                        "zip" => $data_app["zip"],
+                                        "landmark" => $data_app["landmark"]
+                                    );
+                                    $userDetails["addresses"][] = $address;
+                                }
+                
+                                array_push($response["userDetails"], $userDetails);
                             }
-            
+                
                             $response["message"] = "Login success.";
                             $response["status"] = "200";
                             echo json_encode($response);
-                        } else {
+                           } else {
                             mysqli_query($con, "UPDATE users SET login_attempts=login_attempts+1, last_attempt_time=NOW() WHERE id=$userId");
             
                             $response["message"] = "Wrong Credentials.";
@@ -128,7 +146,41 @@ if (isset($_POST) && !empty($_POST)) {
                     }
                 }
             }
-        } else {
+        }elseif ($tag == "AddAddress") {
+            if (empty($user_id) || empty($add_type) || empty($address) || empty($zip) || empty($landmark)) {
+                $response["message"] = "All fields are required for adding an address.";
+                $response["status"] = "400";
+                echo json_encode($response);
+            } else {
+                // Insert the address into the addresses table
+                $user_id = intval($user_id);
+                $m->set_data('add_type', $add_type);
+                $m->set_data('address', $address);
+                $m->set_data('zip', $zip);
+                $m->set_data('landmark', $landmark);
+                
+                $a = array(
+                    'user_id' => $user_id,
+                    'add_type' => $m->get_data('add_type'),
+                    'address' => $m->get_data('address'),
+                    'zip' => $m->get_data('zip'),
+                    'landmark' => $m->get_data('landmark')
+                );
+                
+                $q = $d->insert("addresses", $a);
+                
+                if ($q == true) {
+                    $response['message'] = 'Address added successfully.';
+                    $response['status'] = 200;
+                    echo json_encode($response);
+                } else {
+                    $response["message"] = "Failed to add the address.";
+                    $response["status"] = "201";
+                    echo json_encode($response);
+                }
+            }
+        }
+         else {
             $response["message"] = "Invalid tag.";
             $response["status"] = "400";
             echo json_encode($response);

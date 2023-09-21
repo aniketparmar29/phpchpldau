@@ -122,6 +122,38 @@ elseif ($tag=="AddProduct"){
     }
 
   }
+  if ($tag == 'getAllProduct') {
+    $q = $d->select(
+        "product p 
+        JOIN subcategory s ON p.sub_id = s.subid
+        JOIN category c ON s.category_id = c.category_id",
+        "p.status='true'",
+        "ORDER BY p.pro_id DESC"
+    );
+
+    if (mysqli_num_rows($q) > 0) {
+        $response["productList"] = array();
+
+        while ($data_app = mysqli_fetch_array($q)) {
+            $productDetails = array();
+            $productDetails["pro_id"] = $data_app["pro_id"];
+            $productDetails["sub_id"] = $data_app["sub_id"];
+            $productDetails["category_id"] = $data_app["category_id"];
+            $productDetails["name"] = $data_app["name"];
+            
+            // Include subcategory and category details
+            $productDetails["subcategory_name"] = $data_app["subcategory_name"];
+            $productDetails["category_name"] = $data_app["category_name"];
+            
+            array_push($response["productList"], $productDetails);
+        }
+
+        $response["message"] = "Success.";
+        $response["status"] = "200";
+        echo json_encode($response);
+    }
+}
+
   else{
                        $response["message"]=" not in get url faild.";
                         $response["status"]="201";
