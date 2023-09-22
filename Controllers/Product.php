@@ -150,6 +150,16 @@ elseif ($tag=="AddProduct"){
 
 if ($tag == "addRating") {
   if (isset($user_id) && isset($product_id) && isset($rating)) {
+
+    if($rating>=5 || $rating<0){
+      $response["message"] = "Rating Can't Be Greter Than 5 or Less Than 0 ";
+      $response["status"] = 201;
+      echo json_encode($response);
+      exit();
+    }
+
+
+
       $existingRating = $d->select("product_rating", "user_id=$user_id AND pro_id=$product_id", "");
 
       if ($existingRating && mysqli_num_rows($existingRating) > 0) {
