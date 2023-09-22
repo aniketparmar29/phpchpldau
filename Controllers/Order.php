@@ -20,21 +20,21 @@ if (isset($_POST) && !empty($_POST)) {
 
         if ($tag == "createOrder") {
             if (isset($cart_id) && isset($trx_id)) {
-                $existingCart = $d->select("order_master", "cart_id=$cart_id", "");
+                $existingOrder = $d->select("order_master", "cart_id=$cart_id", "");
 
-                if ($existingCart && mysqli_num_rows($existingCart) > 0) {
-                    $orderMasterData = mysqli_fetch_array($existingCart);
-                    $cart_id = $cartData['cart_id'];
+                if ($existingOrder && mysqli_num_rows($existingOrder) > 0) {
+                    $orderMasterData = mysqli_fetch_array($existingOrder);
+                    $cart_id = $OrderData['cart_id'];
                 } else {
                     $orderMasterData = array(
                         'cart_id' => $cart_id,
                         'create_at' => date('Y-m-d H:i:s')
                     );
-                    $q = $d->insert("cart", $orderMasterData);
-                    $cart_id = $con->insert_id;
+                    $q = $d->insert("order_master", $orderMasterData);
+                    $order_id = $con->insert_id;
                 }
 
-                $cartData = $d->select("cart_item", "cart_id=$cart_id", "");
+                $OrderData = $d->select("order_item", "order_id=$order_id", "");
 
                 if ($cartData && mysqli_num_rows($cartData) > 0) {
                     $productInfo = mysqli_fetch_array($cartData);

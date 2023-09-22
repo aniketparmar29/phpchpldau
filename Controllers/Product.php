@@ -122,37 +122,95 @@ elseif ($tag=="AddProduct"){
     }
 
   }
-  if ($tag == 'getAllProduct') {
-    $q = $d->select(
-        "product p 
-        JOIN subcategory s ON p.sub_id = s.subid
-        JOIN category c ON s.category_id = c.category_id",
-        "p.status='true'",
-        "ORDER BY p.pro_id DESC"
-    );
+  elseif ($tag == 'getAllProduct') {
+    $q = $d->select("product,subcategory,category", "product.sub_id=subcategory.sub_id AND category.category_id=subcategory.category_id");
 
-    if (mysqli_num_rows($q) > 0) {
+    if ($q) { // Check if the query was successful
         $response["productList"] = array();
 
-        while ($data_app = mysqli_fetch_array($q)) {
+        while ($data_app = mysqli_fetch_assoc($q)) { // Use mysqli_fetch_assoc for associative arrays
             $productDetails = array();
             $productDetails["pro_id"] = $data_app["pro_id"];
             $productDetails["sub_id"] = $data_app["sub_id"];
             $productDetails["category_id"] = $data_app["category_id"];
             $productDetails["name"] = $data_app["name"];
-            
-            // Include subcategory and category details
-            $productDetails["subcategory_name"] = $data_app["subcategory_name"];
-            $productDetails["category_name"] = $data_app["category_name"];
-            
+
             array_push($response["productList"], $productDetails);
         }
 
         $response["message"] = "Success.";
         $response["status"] = "200";
         echo json_encode($response);
+    } else {
+        $response["message"] = "Error fetching data.";
+        $response["status"] = "500"; 
+        echo json_encode($response);
     }
 }
+
+elseif ($tag == "addRating") {
+  if (isset($user_id) && isset($product_id) && isset($rating)) {
+
+    $existingRating = $d->select("product_rating", "user_id=$user_id AND pro_id=$product_id", "");
+
+
+    if ($existingRating && mysqli_num_rows($existingRating) > 0) {
+        $rating_data =mysqli_fetch_array($existingRating);
+        $rating_id = $rating_data["pr_id"];
+        $updatedRating =  array('rating' => $rating);
+        $q3 = $d->update("product_rating",$updatedRating,"rating_id=$rating_id");
+
+        $response["message"] = "Your Rating Has Been Updated";
+        $response["status"] = 200;
+        echo json_encode($response);
+        exit();
+      }else{
+
+        $product_ratingData = array(
+          'user_id' => $user_id,
+          'pro_id' => $product_id,
+          'rating' => $rating,
+      );
+       $inserted = $d->insert("product_rating", $product_ratingData);
+
+       $qm = $d->select("product_rating","pro_id=$product_id");
+        $totalrating=0;
+        $numRatings = 0;
+      while( $ratedData = mysqli_fetch_array($qm)){
+
+        $totalrating+=$ratedData["rating"];
+        $numRatings++;
+
+      }
+      $avg_rating= $totalrating/$numRatings;
+      $updatedAVGRating =  array('Avg_Rating' => $avg_rating);
+
+      $qp = $d->update("product",$avg_rating,"pro_id=$product_id");
+
+      $op = mysqli_fetch_array($qp);
+      print_r($op);
+
+
+      if ($inserted) {
+          $response["message"] = "Product_Rating added to Product successfully And Average Rating Updated in Product";
+          $response["status"] = 200;
+          echo json_encode($response);
+      } else {
+          $response["message"] = "Failed to add product_rating to product";
+          $response["status"] = 201;
+          echo json_encode($response);
+      }
+
+      }
+
+
+  } else {
+      $response["message"] = "Missing required parameters";
+      $response["status"] = 201;
+      echo json_encode($response);
+  }
+}
+
 
   else{
                        $response["message"]=" not in get url faild.";
