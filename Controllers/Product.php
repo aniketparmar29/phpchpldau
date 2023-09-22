@@ -148,68 +148,76 @@ elseif ($tag=="AddProduct"){
     }
 }
 
-elseif ($tag == "addRating") {
+if ($tag == "addRating") {
   if (isset($user_id) && isset($product_id) && isset($rating)) {
+      $existingRating = $d->select("product_rating", "user_id=$user_id AND pro_id=$product_id", "");
 
-    $existingRating = $d->select("product_rating", "user_id=$user_id AND pro_id=$product_id", "");
-
-
-    if ($existingRating && mysqli_num_rows($existingRating) > 0) {
-        $rating_data =mysqli_fetch_array($existingRating);
-        $rating_id = $rating_data["pr_id"];
-        $updatedRating =  array('rating' => $rating);
-        $q3 = $d->update("product_rating",$updatedRating,"rating_id=$rating_id");
-
-        $response["message"] = "Your Rating Has Been Updated";
-        $response["status"] = 200;
-        echo json_encode($response);
-        exit();
-      }else{
-
-        $product_ratingData = array(
-          'user_id' => $user_id,
-          'pro_id' => $product_id,
-          'rating' => $rating,
-      );
-       $inserted = $d->insert("product_rating", $product_ratingData);
-
-       $qm = $d->select("product_rating","pro_id=$product_id");
-        $totalrating=0;
-        $numRatings = 0;
-      while( $ratedData = mysqli_fetch_array($qm)){
-
-        $totalrating+=$ratedData["rating"];
-        $numRatings++;
-
-      }
-      $avg_rating= $totalrating/$numRatings;
-      $updatedAVGRating =  array('Avg_Rating' => $avg_rating);
-
-      $qp = $d->update("product",$avg_rating,"pro_id=$product_id");
-
-      $op = mysqli_fetch_array($qp);
-      print_r($op);
+      if ($existingRating && mysqli_num_rows($existingRating) > 0) {
+          $rating_data = mysqli_fetch_array($existingRating);
+          $rating_id = $rating_data["pr_id"];
+          $updatedRating = array('rating' => $rating);
 
 
-      if ($inserted) {
-          $response["message"] = "Product_Rating added to Product successfully And Average Rating Updated in Product";
+          $q3 = $d->update("product_rating", $updatedRating, "rating_id=$rating_id");
+          $qm = $d->select("product_rating", "pro_id=$product_id");
+          $totalrating = 0;
+          $numRatings = 0;
+
+          while ($ratedData = mysqli_fetch_array($qm)) {
+              $totalrating += $ratedData["rating"];
+              $numRatings++;
+          }
+
+          $avg_rating = $numRatings > 0 ? $totalrating / $numRatings : 0;
+          $updatedAVGRating = array('Avg_Rating' => $avg_rating);
+
+          $qp = $d->update("product", $updatedAVGRating, "pro_id=$product_id");
+
+
+
+          $response["message"] = "Your Rating Has Been Updated And Average Rating Updated in Product";
           $response["status"] = 200;
           echo json_encode($response);
+          exit();
       } else {
-          $response["message"] = "Failed to add product_rating to product";
-          $response["status"] = 201;
-          echo json_encode($response);
+          $product_ratingData = array(
+              'user_id' => $user_id,
+              'pro_id' => $product_id,
+              'rating' => $rating,
+          );
+          $inserted = $d->insert("product_rating", $product_ratingData);
+
+          $qm = $d->select("product_rating", "pro_id=$product_id");
+          $totalrating = 0;
+          $numRatings = 0;
+
+          while ($ratedData = mysqli_fetch_array($qm)) {
+              $totalrating += $ratedData["rating"];
+              $numRatings++;
+          }
+
+          $avg_rating = $numRatings > 0 ? $totalrating / $numRatings : 0;
+          $updatedAVGRating = array('Avg_Rating' => $avg_rating);
+
+          $qp = $d->update("product", $updatedAVGRating, "pro_id=$product_id");
+
+          if ($inserted) {
+              $response["message"] = "Product_Rating added to Product successfully And Average Rating Updated in Product";
+              $response["status"] = 200;
+              echo json_encode($response);
+          } else {
+              $response["message"] = "Failed to add product_rating to product";
+              $response["status"] = 201;
+              echo json_encode($response);
+          }
       }
-
-      }
-
-
   } else {
       $response["message"] = "Missing required parameters";
       $response["status"] = 201;
       echo json_encode($response);
   }
 }
+
 
 
   else{
