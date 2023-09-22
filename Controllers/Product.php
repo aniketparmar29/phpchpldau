@@ -166,7 +166,7 @@ if ($tag == "addRating") {
           $rating_data = mysqli_fetch_array($existingRating);
           $rating_id = $rating_data["pr_id"];
           $updatedRating = array('rating' => $rating);
-
+          $qu = $d->update("product_rating",$updatedRating,"user_id=$user_id AND pro_id=$product_id");
           $response["message"] = "Your Rating Has Been Updated ";
           $response["status"] = 200;
           echo json_encode($response);
