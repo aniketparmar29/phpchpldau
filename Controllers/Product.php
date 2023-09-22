@@ -157,28 +157,9 @@ if ($tag == "addRating") {
           $rating_id = $rating_data["pr_id"];
           $updatedRating = array('rating' => $rating);
 
-
-          $q3 = $d->update("product_rating", $updatedRating, "rating_id=$rating_id");
-          $qm = $d->select("product_rating", "pro_id=$product_id");
-          $totalrating = 0;
-          $numRatings = 0;
-
-          while ($ratedData = mysqli_fetch_array($qm)) {
-              $totalrating += $ratedData["rating"];
-              $numRatings++;
-          }
-
-          $avg_rating = $numRatings > 0 ? $totalrating / $numRatings : 0;
-          $updatedAVGRating = array('Avg_Rating' => $avg_rating);
-
-          $qp = $d->update("product", $updatedAVGRating, "pro_id=$product_id");
-
-
-
-          $response["message"] = "Your Rating Has Been Updated And Average Rating Updated in Product";
+          $response["message"] = "Your Rating Has Been Updated ";
           $response["status"] = 200;
           echo json_encode($response);
-          exit();
       } else {
           $product_ratingData = array(
               'user_id' => $user_id,
@@ -186,7 +167,7 @@ if ($tag == "addRating") {
               'rating' => $rating,
           );
           $inserted = $d->insert("product_rating", $product_ratingData);
-
+        }
           $qm = $d->select("product_rating", "pro_id=$product_id");
           $totalrating = 0;
           $numRatings = 0;
@@ -201,7 +182,7 @@ if ($tag == "addRating") {
 
           $qp = $d->update("product", $updatedAVGRating, "pro_id=$product_id");
 
-          if ($inserted) {
+          if ($qm) {
               $response["message"] = "Product_Rating added to Product successfully And Average Rating Updated in Product";
               $response["status"] = 200;
               echo json_encode($response);
@@ -210,7 +191,7 @@ if ($tag == "addRating") {
               $response["status"] = 201;
               echo json_encode($response);
           }
-      }
+      
   } else {
       $response["message"] = "Missing required parameters";
       $response["status"] = 201;
